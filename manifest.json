@@ -1,0 +1,48 @@
+{
+  "manifest_version": 3,
+  "name": "Traffic Analyzer Pro",
+  "version": "1.0.0",
+  "description": "Modern, interactive traffic analyzer with real-time heatmaps, smart route suggestions, and ETA predictions",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "geolocation",
+    "background"
+  ],
+  "host_permissions": [
+    "https://maps.googleapis.com/*",
+    "https://api.mapbox.com/*",
+    "https://*.openstreetmap.org/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Traffic Analyzer Pro",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/*", "styles/*", "scripts/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

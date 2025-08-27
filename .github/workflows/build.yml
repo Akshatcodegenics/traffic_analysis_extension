@@ -1,0 +1,208 @@
+name: Build and Package Extension
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  release:
+    types: [ published ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: |
+        if [ -f package.json ]; then
+          npm ci
+        else
+          echo "No package.json found, skipping npm install"
+        fi
+    
+    - name: Lint JavaScript files
+      run: |
+        if command -v eslint &> /dev/null; then
+          npm run lint
+        else
+          echo "ESLint not configured, skipping lint"
+        fi
+      continue-on-error: true
+    
+    - name: Validate manifest
+      run: |
+        if [ -f manifest.json ]; then
+          echo "Manifest found, validating structure..."
+          node -e "const manifest = require('./manifest.json'); console.log('Manifest version:', manifest.manifest_version); console.log('Extension name:', manifest.name);"
+        else
+          echo "Error: manifest.json not found!"
+          exit 1
+        fi
+    
+    - name: Create extension package
+      run: |
+        echo "Creating extension package..."
+        zip -r traffic-analyzer-pro-${GITHUB_SHA::8}.zip . \
+          -x "node_modules/*" \
+          -x ".git/*" \
+          -x ".github/*" \
+          -x "*.md" \
+          -x ".gitignore" \
+          -x ".eslintrc.*" \
+          -x "package*.json" \
+          -x "webpack.*" \
+          -x "babel.*" \
+          -x "src/*" \
+          -x "tests/*" \
+          -x "*.test.js" \
+          -x ".env*"
+        
+        # List contents of zip file
+        echo "Package contents:"
+        unzip -l traffic-analyzer-pro-${GITHUB_SHA::8}.zip
+        
+    - name: Verify package size
+      run: |
+        SIZE=$(stat -f%z traffic-analyzer-pro-${GITHUB_SHA::8}.zip 2>/dev/null || stat -c%s traffic-analyzer-pro-${GITHUB_SHA::8}.zip)
+        echo "Package size: ${SIZE} bytes"
+        if [ ${SIZE} -gt 20971520 ]; then  # 20MB limit
+          echo "Warning: Package size exceeds Chrome Web Store limit (20MB)"
+          exit 1
+        fi
+    
+    - name: Upload extension package
+      uses: actions/upload-artifact@v4
+      with:
+        name: traffic-analyzer-pro-${{ github.sha }}
+        path: traffic-analyzer-pro-${{ github.sha }}.zip
+        retention-days: 30
+    
+    - name: Create development build info
+      run: |
+        echo "Build Information" > BUILD_INFO.txt
+        echo "=================" >> BUILD_INFO.txt
+        echo "Commit: ${{ github.sha }}" >> BUILD_INFO.txt
+        echo "Branch: ${{ github.ref_name }}" >> BUILD_INFO.txt
+        echo "Build Date: $(date)" >> BUILD_INFO.txt
+        echo "Trigger: ${{ github.event_name }}" >> BUILD_INFO.txt
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+          echo "PR Number: ${{ github.event.pull_request.number }}" >> BUILD_INFO.txt
+        fi
+        cat BUILD_INFO.txt
+    
+    - name: Upload build info
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-info-${{ github.sha }}
+        path: BUILD_INFO.txt
+
+  security-scan:
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Run security audit
+      run: |
+        if [ -f package.json ]; then
+          npm audit --audit-level=moderate
+        else
+          echo "No package.json found, checking for common security issues..."
+        fi
+      continue-on-error: true
+    
+    - name: Check for sensitive files
+      run: |
+        echo "Checking for sensitive files..."
+        SENSITIVE_FILES=0
+        
+        # Check for common sensitive file patterns
+        if find . -name "*.key" -o -name "*.pem" -o -name ".env" -o -name "*.env.*" | grep -q .; then
+          echo "Warning: Found potential sensitive files"
+          find . -name "*.key" -o -name "*.pem" -o -name ".env" -o -name "*.env.*"
+          SENSITIVE_FILES=1
+        fi
+        
+        # Check for hardcoded secrets in JavaScript files
+        if grep -r "password\|secret\|key.*=" --include="*.js" --include="*.json" .; then
+          echo "Warning: Found potential hardcoded secrets"
+          SENSITIVE_FILES=1
+        fi
+        
+        if [ $SENSITIVE_FILES -eq 0 ]; then
+          echo "No sensitive files found ✓"
+        fi
+
+  release:
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    needs: [build, security-scan]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Download extension package
+      uses: actions/download-artifact@v4
+      with:
+        name: traffic-analyzer-pro-${{ github.sha }}
+        
+    - name: Create release package
+      run: |
+        # Extract version from manifest.json
+        VERSION=$(node -e "console.log(require('./manifest.json').version)")
+        echo "Extension version: $VERSION"
+        
+        # Rename package for release
+        mv traffic-analyzer-pro-${{ github.sha }}.zip traffic-analyzer-pro-v${VERSION}.zip
+        
+        # Generate release notes
+        echo "# Traffic Analyzer Pro v${VERSION}" > RELEASE_NOTES.md
+        echo "" >> RELEASE_NOTES.md
+        echo "## Changes in this release" >> RELEASE_NOTES.md
+        echo "- Built from commit: ${{ github.sha }}" >> RELEASE_NOTES.md
+        echo "- Release date: $(date)" >> RELEASE_NOTES.md
+        echo "" >> RELEASE_NOTES.md
+        echo "## Installation" >> RELEASE_NOTES.md
+        echo "1. Download traffic-analyzer-pro-v${VERSION}.zip" >> RELEASE_NOTES.md
+        echo "2. Extract the zip file" >> RELEASE_NOTES.md
+        echo "3. Load unpacked extension in Chrome" >> RELEASE_NOTES.md
+    
+    - name: Upload release asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: traffic-analyzer-pro-v${{ github.event.release.tag_name }}.zip
+        asset_name: traffic-analyzer-pro-v${{ github.event.release.tag_name }}.zip
+        asset_content_type: application/zip
+
+  notify:
+    runs-on: ubuntu-latest
+    needs: [build, security-scan]
+    if: always()
+    
+    steps:
+    - name: Build Status Notification
+      run: |
+        if [ "${{ needs.build.result }}" = "success" ] && [ "${{ needs.security-scan.result }}" = "success" ]; then
+          echo "✅ Build completed successfully!"
+          echo "Extension package is ready for testing"
+        else
+          echo "❌ Build failed or has issues"
+          echo "Build status: ${{ needs.build.result }}"
+          echo "Security scan status: ${{ needs.security-scan.result }}"
+        fi

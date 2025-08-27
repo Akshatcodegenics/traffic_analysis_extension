@@ -1,0 +1,278 @@
+/* ===== DARK THEME VARIABLES ===== */
+.theme-dark {
+  /* Colors - Dark Theme */
+  --primary-color: #818cf8;
+  --secondary-color: #a855f7;
+  --accent-color: #f472b6;
+  --success-color: #22c55e;
+  --warning-color: #f59e0b;
+  --error-color: #ef4444;
+  
+  /* Backgrounds */
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --bg-glass: rgba(30, 41, 59, 0.8);
+  --bg-overlay: rgba(0, 0, 0, 0.7);
+  
+  /* Text Colors */
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #64748b;
+  --text-inverse: #0f172a;
+  
+  /* Borders & Shadows */
+  --border-color: #334155;
+  --border-hover: #475569;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 20px rgba(129, 140, 248, 0.4);
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  --gradient-accent: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+  --gradient-glass: linear-gradient(135deg, rgba(30, 41, 59, 0.2), rgba(30, 41, 59, 0.1));
+}
+
+/* ===== THEME SPECIFIC OVERRIDES ===== */
+.theme-dark .app-container {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+}
+
+.theme-dark .theme-toggle i {
+  transform: rotate(0deg);
+  transition: transform var(--transition-fast);
+}
+
+.theme-light .theme-toggle i {
+  transform: rotate(180deg);
+  transition: transform var(--transition-fast);
+}
+
+/* Theme toggle icon animation */
+.theme-dark .theme-toggle i::before {
+  content: "\f185"; /* fa-sun */
+}
+
+.theme-light .theme-toggle i::before {
+  content: "\f186"; /* fa-moon */
+}
+
+/* ===== ENHANCED GLASSMORPHISM EFFECTS ===== */
+.theme-dark .nav-item.active,
+.theme-dark .legend,
+.theme-dark .chart-container,
+.theme-dark .time-slider-container,
+.theme-dark .route-card,
+.theme-dark .favorite-item {
+  background: var(--bg-glass);
+  border: 1px solid rgba(129, 140, 248, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.theme-light .nav-item.active,
+.theme-light .legend,
+.theme-light .chart-container,
+.theme-light .time-slider-container,
+.theme-light .route-card,
+.theme-light .favorite-item {
+  background: var(--bg-glass);
+  border: 1px solid rgba(102, 126, 234, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ===== DARK THEME SPECIFIC ENHANCEMENTS ===== */
+.theme-dark .traffic-map {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+}
+
+.theme-dark .chart {
+  background: linear-gradient(135deg, #1e293b, #334155);
+}
+
+.theme-dark .location-input:focus,
+.theme-dark .form-input:focus,
+.theme-dark .time-select:focus {
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15);
+}
+
+.theme-dark .route-card.selected {
+  background: linear-gradient(135deg, rgba(129, 140, 248, 0.15), rgba(168, 85, 247, 0.1));
+  border-color: var(--primary-color);
+  box-shadow: 0 0 30px rgba(129, 140, 248, 0.3);
+}
+
+/* ===== LIGHT THEME SPECIFIC ENHANCEMENTS ===== */
+.theme-light .traffic-map {
+  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+}
+
+.theme-light .chart {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+}
+
+.theme-light .route-card.selected {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.05));
+  border-color: var(--primary-color);
+  box-shadow: 0 0 25px rgba(102, 126, 234, 0.2);
+}
+
+/* ===== SCROLLBAR THEMING ===== */
+.theme-dark .content-area::-webkit-scrollbar-track,
+.theme-dark .route-results::-webkit-scrollbar-track,
+.theme-dark .favorites-list::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+}
+
+.theme-dark .content-area::-webkit-scrollbar-thumb,
+.theme-dark .route-results::-webkit-scrollbar-thumb,
+.theme-dark .favorites-list::-webkit-scrollbar-thumb {
+  background: var(--border-hover);
+}
+
+.theme-dark .content-area::-webkit-scrollbar-thumb:hover,
+.theme-dark .route-results::-webkit-scrollbar-thumb:hover,
+.theme-dark .favorites-list::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ===== THEME TRANSITION ANIMATIONS ===== */
+* {
+  transition: background-color var(--transition-normal),
+              border-color var(--transition-normal),
+              color var(--transition-normal),
+              box-shadow var(--transition-normal);
+}
+
+/* Disable transitions during theme switching to prevent flashing */
+.theme-switching * {
+  transition: none !important;
+}
+
+/* ===== THEME-SPECIFIC TRAFFIC INDICATORS ===== */
+.theme-dark .color-indicator.smooth {
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
+}
+
+.theme-dark .color-indicator.moderate {
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+}
+
+.theme-dark .color-indicator.heavy {
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+}
+
+/* ===== THEME-SPECIFIC GLOW EFFECTS ===== */
+.theme-dark .zoom-btn:hover {
+  box-shadow: 0 0 12px rgba(129, 140, 248, 0.3);
+}
+
+.theme-dark .nav-item.active::before {
+  box-shadow: 0 0 8px var(--primary-color);
+}
+
+.theme-dark .action-btn.primary,
+.theme-dark .form-button.primary,
+.theme-dark .refresh-btn,
+.theme-dark .add-btn {
+  box-shadow: 0 0 15px rgba(129, 140, 248, 0.3);
+}
+
+.theme-dark .action-btn.primary:hover,
+.theme-dark .form-button.primary:hover,
+.theme-dark .refresh-btn:hover,
+.theme-dark .add-btn:hover {
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4), var(--shadow-md);
+}
+
+/* ===== HIGH CONTRAST MODE SUPPORT ===== */
+@media (prefers-contrast: high) {
+  :root {
+    --border-color: #000000;
+    --text-secondary: #000000;
+  }
+  
+  .theme-dark {
+    --border-color: #ffffff;
+    --text-secondary: #ffffff;
+    --bg-secondary: #000000;
+    --bg-tertiary: #333333;
+  }
+}
+
+/* ===== REDUCED MOTION SUPPORT ===== */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .loading-spinner i,
+  .status-dot,
+  .traffic-intensity-high,
+  .traffic-intensity-medium,
+  .traffic-intensity-low {
+    animation: none !important;
+  }
+}
+
+/* ===== SYSTEM THEME PREFERENCE ===== */
+@media (prefers-color-scheme: dark) {
+  body:not(.theme-light):not(.theme-dark) {
+    @apply theme-dark;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  body:not(.theme-light):not(.theme-dark) {
+    @apply theme-light;
+  }
+}
+
+/* ===== CUSTOM THEME ANIMATIONS ===== */
+@keyframes themeTransition {
+  0% {
+    opacity: 0.8;
+    filter: brightness(0.8);
+  }
+  50% {
+    opacity: 0.9;
+    filter: brightness(1.1);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+.theme-transition {
+  animation: themeTransition 0.5s ease-out;
+}
+
+/* ===== FOCUS INDICATORS FOR ACCESSIBILITY ===== */
+.theme-dark *:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.theme-light *:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* ===== THEME-SPECIFIC PLACEHOLDER STYLING ===== */
+.theme-dark .location-input::placeholder,
+.theme-dark .form-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.theme-light .location-input::placeholder,
+.theme-light .form-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}

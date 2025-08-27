@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Analyzer Pro</title>
+    <link rel="stylesheet" href="styles/popup.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/themes.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="theme-light">
+    <div id="app" class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <i class="fas fa-route logo-icon"></i>
+                    <h1 class="app-title">Traffic Analyzer Pro</h1>
+                </div>
+                <div class="header-controls">
+                    <button id="themeToggle" class="theme-toggle" title="Toggle Theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button id="settingsBtn" class="settings-btn" title="Settings">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar Navigation -->
+            <nav class="sidebar" id="sidebar">
+                <div class="nav-items">
+                    <button class="nav-item active" data-section="heatmap">
+                        <i class="fas fa-map"></i>
+                        <span>Traffic Heatmap</span>
+                    </button>
+                    <button class="nav-item" data-section="routes">
+                        <i class="fas fa-route"></i>
+                        <span>Smart Routes</span>
+                    </button>
+                    <button class="nav-item" data-section="analytics">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Analytics</span>
+                    </button>
+                    <button class="nav-item" data-section="favorites">
+                        <i class="fas fa-star"></i>
+                        <span>Favorites</span>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Content Sections -->
+            <div class="content-area">
+                <!-- Traffic Heatmap Section -->
+                <section id="heatmap-section" class="content-section active">
+                    <div class="section-header">
+                        <h2><i class="fas fa-map"></i> Real-Time Traffic Heatmap</h2>
+                        <div class="view-controls">
+                            <button class="control-btn" data-view="road">Road</button>
+                            <button class="control-btn active" data-view="area">Area</button>
+                            <button class="control-btn" data-view="city">City</button>
+                        </div>
+                    </div>
+                    
+                    <div class="heatmap-container">
+                        <div id="trafficMap" class="traffic-map">
+                            <!-- Map will be rendered here -->
+                            <div class="map-placeholder">
+                                <i class="fas fa-map-marked-alt"></i>
+                                <p>Loading traffic heatmap...</p>
+                            </div>
+                        </div>
+                        
+                        <div class="map-controls">
+                            <div class="zoom-controls">
+                                <button id="zoomIn" class="zoom-btn"><i class="fas fa-plus"></i></button>
+                                <button id="zoomOut" class="zoom-btn"><i class="fas fa-minus"></i></button>
+                            </div>
+                            
+                            <div class="legend">
+                                <h4>Traffic Intensity</h4>
+                                <div class="legend-items">
+                                    <div class="legend-item">
+                                        <span class="color-indicator smooth"></span>
+                                        <span>Smooth</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="color-indicator moderate"></span>
+                                        <span>Moderate</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="color-indicator heavy"></span>
+                                        <span>Heavy</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Smart Routes Section -->
+                <section id="routes-section" class="content-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-route"></i> Smart Route Suggestions</h2>
+                        <button id="refreshRoutes" class="refresh-btn">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="route-input">
+                        <div class="input-group">
+                            <input type="text" id="fromLocation" placeholder="From location..." class="location-input">
+                            <i class="fas fa-map-marker-alt input-icon"></i>
+                        </div>
+                        <div class="swap-locations">
+                            <button id="swapLocations" class="swap-btn">
+                                <i class="fas fa-exchange-alt"></i>
+                            </button>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" id="toLocation" placeholder="To location..." class="location-input">
+                            <i class="fas fa-flag input-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="departure-time">
+                        <label>Departure Time:</label>
+                        <select id="departureTime" class="time-select">
+                            <option value="now">Now</option>
+                            <option value="optimal">Optimal Time</option>
+                            <option value="custom">Custom Time</option>
+                        </select>
+                    </div>
+                    
+                    <div id="routeResults" class="route-results">
+                        <!-- Route suggestions will be populated here -->
+                    </div>
+                </section>
+
+                <!-- Analytics Section -->
+                <section id="analytics-section" class="content-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-chart-line"></i> Traffic Analytics</h2>
+                        <div class="time-controls">
+                            <button class="time-btn active" data-period="1h">1H</button>
+                            <button class="time-btn" data-period="6h">6H</button>
+                            <button class="time-btn" data-period="24h">24H</button>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-grid">
+                        <div class="chart-container">
+                            <h3>Speed Trends</h3>
+                            <div id="speedChart" class="chart">
+                                <!-- Chart will be rendered here -->
+                            </div>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <h3>Delay Patterns</h3>
+                            <div id="delayChart" class="chart">
+                                <!-- Chart will be rendered here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="time-slider-container">
+                        <h3>Time Explorer</h3>
+                        <div class="slider-wrapper">
+                            <input type="range" id="timeSlider" class="time-slider" min="0" max="24" step="0.5" value="12">
+                            <div class="slider-labels">
+                                <span>Past</span>
+                                <span id="currentTime">Present</span>
+                                <span>Future</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Favorites Section -->
+                <section id="favorites-section" class="content-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-star"></i> Favorite Routes</h2>
+                        <button id="addFavorite" class="add-btn">
+                            <i class="fas fa-plus"></i> Add Route
+                        </button>
+                    </div>
+                    
+                    <div id="favoritesList" class="favorites-list">
+                        <!-- Favorite routes will be populated here -->
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay hidden">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Analyzing traffic data...</p>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toastContainer" class="toast-container"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="scripts/utils.js"></script>
+    <script src="scripts/themeManager.js"></script>
+    <script src="scripts/dataManager.js"></script>
+    <script src="scripts/heatmapController.js"></script>
+    <script src="scripts/routeController.js"></script>
+    <script src="scripts/analyticsController.js"></script>
+    <script src="scripts/favoritesController.js"></script>
+    <script src="scripts/popup.js"></script>
+</body>
+</html>

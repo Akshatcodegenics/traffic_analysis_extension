@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Analysis Extension - Test Page</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .feature-card h3 {
+            color: #ffd700;
+            margin-top: 0;
+        }
+        .test-instructions {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4CAF50;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .demo-urls {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .demo-urls a {
+            color: #ffd700;
+            text-decoration: none;
+            display: block;
+            margin: 5px 0;
+        }
+        .demo-urls a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Traffic Analysis Extension Test</h1>
+        
+        <div class="test-instructions">
+            <h2>📋 Testing Instructions</h2>
+            <ol>
+                <li><strong>Install Extension:</strong> Load the <code>dist/</code> folder as an unpacked extension in Chrome/Edge</li>
+                <li><strong>Click Extension Icon:</strong> The traffic analyzer icon should appear in your browser toolbar</li>
+                <li><strong>Test on Different Sites:</strong> Visit various websites and click the extension to see traffic analysis</li>
+                <li><strong>Check Features:</strong> Verify all the features listed below are working</li>
+            </ol>
+        </div>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>📊 Traffic Overview</h3>
+                <p>• Monthly visits count<br>
+                • Domain security check<br>
+                • Global ranking estimation<br>
+                • Real-time analysis</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>🌍 Geographic Analysis</h3>
+                <p>• Top countries breakdown<br>
+                • Percentage distribution<br>
+                • Visual country indicators<br>
+                • Region-based insights</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>🔗 Traffic Sources</h3>
+                <p>• Search engine traffic<br>
+                • Social media referrals<br>
+                • Direct traffic analysis<br>
+                • Source percentage breakdown</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>📝 Visit History</h3>
+                <p>• Recent sites visited<br>
+                • Timestamp tracking<br>
+                • Domain history<br>
+                • Local storage integration</p>
+            </div>
+        </div>
+
+        <div class="demo-urls">
+            <h3>🌐 Test URLs (try visiting these):</h3>
+            <a href="https://github.com" target="_blank">GitHub.com - Tech Platform</a>
+            <a href="https://stackoverflow.com" target="_blank">StackOverflow.com - Developer Community</a>
+            <a href="https://google.com" target="_blank">Google.com - Search Engine</a>
+            <a href="https://youtube.com" target="_blank">YouTube.com - Video Platform</a>
+            <a href="https://amazon.com" target="_blank">Amazon.com - E-commerce</a>
+        </div>
+
+        <div class="test-instructions">
+            <h3>🔧 Extension Status</h3>
+            <p><span class="status-indicator"></span><strong>Extension Built:</strong> Ready for testing</p>
+            <p><span class="status-indicator"></span><strong>React Components:</strong> Functional</p>
+            <p><span class="status-indicator"></span><strong>Webpack Bundle:</strong> Optimized (152 KiB)</p>
+            <p><span class="status-indicator"></span><strong>API Integration:</strong> Mock data ready</p>
+        </div>
+
+        <div class="feature-card">
+            <h3>🎯 What to Test</h3>
+            <ul>
+                <li><strong>Popup Functionality:</strong> Click extension icon to open popup</li>
+                <li><strong>URL Analysis:</strong> Visit different websites and see traffic data change</li>
+                <li><strong>Security Detection:</strong> Check HTTP vs HTTPS indicator</li>
+                <li><strong>Data Display:</strong> Verify countries and referrers show realistic data</li>
+                <li><strong>Recent Visits:</strong> Check if visit history is being tracked</li>
+                <li><strong>Responsive UI:</strong> Ensure popup displays correctly</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactivity to demonstrate the page
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Traffic Analysis Extension Test Page Loaded');
+            console.log('📊 Current URL:', window.location.href);
+            console.log('🌐 Domain:', window.location.hostname);
+            
+            // Simulate some activity for extension to track
+            setTimeout(() => {
+                console.log('⏰ Page activity simulated - extension should detect this');
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
